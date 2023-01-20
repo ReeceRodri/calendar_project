@@ -43,27 +43,48 @@ def callback_year(selection):
     current_window_date[2] = selection
     print(current_window_date)
 
-def scroll_date(increase):
-    if increase:
-        if current_window_date[0] + 1 in create_days_list(current_window_date[2],current_window_date[1]):
-            current_window_date[0] += 1
-            value_inside_days.set(str(current_window_date[0]))
+def scroll_date_right():
+    
+    if current_window_date[0] + 1 in create_days_list(current_window_date[2],current_window_date[1]):
+        current_window_date[0] += 1
+        value_inside_days.set(str(current_window_date[0]))
+        value_inside_month.set(str(month_list[current_window_date[1]-1]))
+        value_inside_year.set(str(current_window_date[2]))
             
-        else: 
-            if current_window_date[1] <= 12:
-                current_window_date[1] += 1
-                scroll_date()
-            else:
-                    current_window_date[2] += 1 
-                    current_window_date[1] = 1
-                    current_window_date[0] = 1
     else: 
-        if current_window_date[0] - 1 in create_days_list(current_window_date[2], current_window_date[1]):
-            current_window_date[0] -= 1
-            value_inside_days.set(str(current_window_date[0]))
-        
+        if current_window_date[1] < 12:
+            current_window_date[1] += 1
+            current_window_date[0] = 0 
+            scroll_date_right()
+        else:
+            current_window_date[2] += 1 
+            current_window_date[1] = 1
+            current_window_date[0] = 0
+            scroll_date_right()
+    
+    
 
-    print(current_window_date)
+   
+def scroll_date_left():
+    if current_window_date[0] - 1 in create_days_list(current_window_date[2],current_window_date[1]):
+        current_window_date[0] -= 1
+        value_inside_days.set(str(current_window_date[0]))
+        value_inside_month.set(str(month_list[current_window_date[1]-1]))
+        value_inside_year.set(str(current_window_date[2]))
+            
+    else: 
+        if current_window_date[1] > 1:
+            current_window_date[1] -= 1
+            current_window_date[0] = create_days_list(current_window_date[2],current_window_date[1])[-1] + 1
+            scroll_date_left()
+        else:
+            current_window_date[2] -= 1 
+            current_window_date[1] = 12
+            current_window_date[0] = create_days_list(current_window_date[2],current_window_date[1])[-1] + 1
+            scroll_date_left()
+    
+   
+
 
 
 
@@ -74,10 +95,10 @@ stat_button.place(relx=0, rely=0, relwidth=0.05, relheight=0.05)
 save_button = tk.Button(root, text= 'Add a task', bg = 'gray', fg = 'white')
 save_button.place(relx=0.2, rely=0.85, relwidth=0.6, relheight=0.1)
 
-forward_button = tk.Button(root, text= '>', bg = 'gray', fg = 'white', command= lambda: scroll_date(True))
+forward_button = tk.Button(root, text= '>', bg = 'gray', fg = 'white', command= lambda: scroll_date_right())
 forward_button.place(relx= 0.9, rely=0.87, relwidth=0.05, relheight= 0.05)
 
-back_button = tk.Button(root, text= '<', bg = 'gray', fg = 'white', command= lambda: scroll_date(False))
+back_button = tk.Button(root, text= '<', bg = 'gray', fg = 'white', command= lambda: scroll_date_left())
 back_button.place(relx=0.05, rely= 0.87, relwidth=0.05, relheight=0.05)
 
 
