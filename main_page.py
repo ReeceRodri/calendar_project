@@ -3,7 +3,6 @@ from datetime  import date
 from  calendar import monthrange
 
 root = tk.Tk()
-root.title("CALENDAR")
 root.geometry('500x400')
 
 DATE = str(date.today()).split('-')
@@ -87,59 +86,13 @@ def scroll_date_left():
    
 
 
-def add_event():
-    editor= tk.Toplevel()
-    editor=tk.Tk()
-    editor.title("Calendar")
-    editor.geometry("350x250")
-
-
-
-    #Defining the save button function
-    def save():
-        """date= editor_date.get()
-        time= editor_time.get()
-        title= editor_title.get()
-        description= editor_description.get()
-        """
-        pass
-
-
-    #Defining Labels 
-    lb_date=tk.Label(editor,text="Date").place(x=10,y=20)
-    lb_time=tk.Label(editor,text="Time").place(x=10,y=40)
-    lb_title=tk.Label(editor,text="Title").place(x=10,y=60)
-    lb_desc=tk.Label(editor,text="Description").place(x=10,y=80)
-
-     #Entry Statements
-    editor_date=tk.Entry(editor,width=30)
-    editor_date.place(x=100,y=20)
-
-    editor_time=tk.Entry(editor,width=30)
-    editor_time.place(x=100,y=40)
-
-    editor_title=tk.Entry(editor,width=30)
-    editor_title.place(x=100,y=60)
-
-    editor_description=tk.Entry(editor,width=30)
-    editor_description.place(x=100,y=80)
-
-
-
-
-    #Creating the save button
-    save_button=tk.Button(editor,text="SAVE",command = save).place(x=300,y=100)
-
-    return_button=tk.Button(editor, text="Return",command=editor.destroy).place(x=10,y=100)
-
-    editor.mainloop()
 
 
 
 stat_button = tk.Button(root, text= 'st',bg = 'gray', fg = 'white')
 stat_button.place(relx=0, rely=0, relwidth=0.05, relheight=0.05)
 
-save_button = tk.Button(root, text= 'Add a task', bg = 'gray', fg = 'white',command= add_event)
+save_button = tk.Button(root, text= 'Add a task', bg = 'gray', fg = 'white')
 save_button.place(relx=0.2, rely=0.85, relwidth=0.6, relheight=0.1)
 
 forward_button = tk.Button(root, text= '>', bg = 'gray', fg = 'white', command= lambda: scroll_date_right())
@@ -177,24 +130,6 @@ value_inside_year = tk.IntVar(date_frame)
 value_inside_year.set(YEAR)
 year_optionmenue = tk.OptionMenu(date_frame, value_inside_year, *year_list,command = callback_year)
 year_optionmenue.place(relx=0.6, rely=0, relwidth= 0.4, relheight=1)
-
-
-# Events frame 
-class events:
-    def event_frames(self):
-        event_frame=LabelFrame()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 root.mainloop()
