@@ -1,0 +1,40 @@
+
+
+import csv
+from datetime import date
+
+class Queries:
+    def __init__(self, file_name):
+        self.file_name = file_name
+#method to read the file
+    def read_file(self):
+        with open(self.file_name, 'r') as f:
+            reader = csv.reader(f)
+            self.data = list(reader)
+            print(f'File {self.file_name} has been read.')
+#method to display all rows
+    def display_rows(self):
+        for row in self.data:
+            print(row)
+#Just in case : method to display all columns
+    def display_columns(self):
+        for i in range(len(self.data[0])):
+            column = []
+            for row in self.data:
+                column.append(row[i])
+            print(column)
+#writing to a file
+# has to be called in the save command button          
+    def write_file(self):
+        with open(self.file_name, 'w') as f:
+            writer = csv.writer(f)
+            for row in self.data:
+                writer.writerow(row)
+            print(f'File {self.file_name} has been written.')
+# checking current date and returning the entire row           
+    def check_date(self, date_column):
+        current_date = date.today()
+        for row in self.data:
+            if row[date_column] == current_date:
+                return row
+
