@@ -17,10 +17,10 @@ current_window_date = [DAY, MONTH , YEAR]
 
 def create_days_list(year, month):
     number_of_days = monthrange(year, month)[1]
-    days_list = [i for i in range(1,number_of_days +1)]
+    days_list = [i for i in range(1,number_of_days +1)]   
     return days_list
 
-days_list = create_days_list(YEAR, MONTH)
+days_list = create_days_list(current_window_date[2], current_window_date[1])
 
 month_list = ['January', 'February', 'March', 'April', 'May', 
             'June', 'July', 'August', 'September', 'October', 
@@ -31,15 +31,36 @@ year_list = [i for i in range(1990,2100)]
 
 def callback_day(selection):
     current_window_date[0] = selection
+    print(current_window_date)
    
 
 def callback_month(selection):
     current_window_date[1] = month_list.index(selection) + 1
-   
+    new_days_list = create_days_list(current_window_date[2], current_window_date[1])
 
+    if current_window_date[0] not in new_days_list: 
+        current_window_date[0] = new_days_list[-1]
+        value_inside_days.set(current_window_date[0])
+        
+    day_optionmenue = tk.OptionMenu(date_frame, value_inside_days, *new_days_list,command=callback_day)
+    day_optionmenue.place(relx=0, rely=0, relwidth= 0.25, relheight=1)
+    print(current_window_date)
+
+
+
+
+   
+   
 def callback_year(selection):
     current_window_date[2] = selection
-   
+    new_days_list = create_days_list(current_window_date[2], current_window_date[1])
+
+    if current_window_date[0] not in new_days_list: 
+        current_window_date[0] = new_days_list[-1]
+        value_inside_days.set(current_window_date[0])
+        
+    day_optionmenue = tk.OptionMenu(date_frame, value_inside_days, *new_days_list,command=callback_day)
+    day_optionmenue.place(relx=0, rely=0, relwidth= 0.25, relheight=1)
 
 def scroll_date_right():
     
