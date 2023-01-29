@@ -3,6 +3,7 @@ from tkinter import ttk
 from datetime  import date
 from  calendar import monthrange
 from statistics_page import statistics_page
+from Event_Details import add_event
 
 root = tk.Tk()
 root.geometry('500x400')
@@ -49,8 +50,6 @@ def callback_month(selection):
 
 
 
-   
-   
 def callback_year(selection):
     current_window_date[2] = selection
     new_days_list = create_days_list(current_window_date[2], current_window_date[1])
@@ -62,11 +61,18 @@ def callback_year(selection):
     day_optionmenue = tk.OptionMenu(date_frame, value_inside_days, *new_days_list,command=callback_day)
     day_optionmenue.place(relx=0, rely=0, relwidth= 0.25, relheight=1)
 
+
+
 def scroll_date_right():
     
     if current_window_date[0] + 1 in create_days_list(current_window_date[2],current_window_date[1]):
         current_window_date[0] += 1
+
         value_inside_days.set(str(current_window_date[0]))
+        new_days_list = create_days_list(current_window_date[2], current_window_date[1])
+        day_optionmenue = tk.OptionMenu(date_frame, value_inside_days, *new_days_list,command=callback_day)
+        day_optionmenue.place(relx=0, rely=0, relwidth= 0.25, relheight=1)
+        
         value_inside_month.set(str(month_list[current_window_date[1]-1]))
         value_inside_year.set(str(current_window_date[2]))
             
@@ -87,7 +93,12 @@ def scroll_date_right():
 def scroll_date_left():
     if current_window_date[0] - 1 in create_days_list(current_window_date[2],current_window_date[1]):
         current_window_date[0] -= 1
+
         value_inside_days.set(str(current_window_date[0]))
+        new_days_list = create_days_list(current_window_date[2], current_window_date[1])
+        day_optionmenue = tk.OptionMenu(date_frame, value_inside_days, *new_days_list,command=callback_day)
+        day_optionmenue.place(relx=0, rely=0, relwidth= 0.25, relheight=1)
+       
         value_inside_month.set(str(month_list[current_window_date[1]-1]))
         value_inside_year.set(str(current_window_date[2]))
             
@@ -112,7 +123,7 @@ def create_event(frame):
 stat_button = tk.Button(root, text= 'st',bg = 'gray', fg = 'white', command = statistics_page)
 stat_button.place(relx=0, rely=0, relwidth=0.05, relheight=0.05)
 
-save_button = tk.Button(root, text= 'Add a task', bg = 'gray', fg = 'white')
+save_button = tk.Button(root, text= 'Add a task', bg = 'gray', fg = 'white', command = add_event)
 save_button.place(relx=0.2, rely=0.85, relwidth=0.6, relheight=0.1)
 
 forward_button = tk.Button(root, text= '>', bg = 'gray', fg = 'white', command= lambda: scroll_date_right())
@@ -144,30 +155,6 @@ canvas.create_window((0,0), window= main_event_frame, anchor='nw')
 
 for i in range(10):
      tk.Button(main_event_frame, text= 'that is an event', bg = 'gray', fg = 'white').grid(row = i , column=0, pady = 5, padx = 10)
-
-
-# Creating canvas object 
-# canvas = tk.Canvas(event_frame)
-# scrollbar = ttk.Scrollbar(event_frame, orient= "vertical", command = canvas.yview)
-# scrollable_frame = ttk.Frame(canvas)
-
-# scrollable_frame.bind(
-#     "<Configure>",
-#     lambda e: canvas.configure(
-#         scrollregion=canvas.bbox("all")
-#     )
-# )
-
-# canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-
-# canvas.configure(yscrollcommand=scrollbar.set)
-
-
-# canvas.pack(side="left", fill="both", expand=True)
-# scrollbar.pack(side="right", fill="y")
-
-# for i in range(50):
-#     ttk.Label(scrollable_frame, text="Sample scrolling label").pack()
 
 
 # Creating a date selecting onject
