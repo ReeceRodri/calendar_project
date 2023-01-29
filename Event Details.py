@@ -1,5 +1,5 @@
 import tkinter as tk
-import Queries
+
 
 # add the following to the save button as a command and assign command=add_event
 def add_event():
