@@ -62,7 +62,9 @@ def callback_year(selection):
     day_optionmenue = tk.OptionMenu(date_frame, value_inside_days, *new_days_list,command=callback_day)
     day_optionmenue.place(relx=0, rely=0, relwidth= 0.25, relheight=1)
 
-
+current_time_selecion = [None]
+def time_option_manue_callback(selection):
+    current_time_selecion[0] = selection
 
 def scroll_date_right():
     
@@ -139,15 +141,13 @@ def add_event():
 
 
     #Defining the save button function
-    def save():
+    def save(time, title, description):
         #assigning global variables to get them in the modification function
-        global editor_time_menu
-        global editor_title
-        global editor_description
+       
 
-        time=editor_time_menu.get()
-        title= editor_title.get()
-        description= editor_description.get()
+        time=time
+        title= title.get()
+        description= description.get()
         
         #creating an instance of queries class
         queries=Queries()
@@ -175,7 +175,7 @@ def add_event():
     times = create_time_menu()
     variable = tk.StringVar(root)
     variable.set(times[0])
-    editor_time_menu = tk.OptionMenu(editor, variable, *times)
+    editor_time_menu = tk.OptionMenu(editor, variable, *times, command= time_option_manue_callback)
     editor_time_menu.place(x=100,y=40)
 
     editor_title=tk.Entry(editor,width=30)
@@ -189,7 +189,7 @@ def add_event():
     
  
     #Creating the save button
-    save_button=tk.Button(editor,text="SAVE",command = save).place(x=300,y=120)
+    save_button=tk.Button(editor,text="SAVE",command = save(editor_time_menu,editor_title,current_time_selecion[0])).place(x=300,y=120)
 
     return_button=tk.Button(editor, text="Return",command=editor.destroy).place(x=10,y=120)  
     
