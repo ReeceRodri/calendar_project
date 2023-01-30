@@ -1,6 +1,6 @@
 import tkinter as tk
 
-
+    
 # add the following to the save button as a command and assign command=add_event
 def add_event():
     editor= tk.Toplevel()
@@ -50,6 +50,7 @@ def add_event():
     #Creating the save button
     save_button=tk.Button(editor,text="SAVE",command = save).place(x=300,y=100)
 
-    return_button=tk.Button(editor, text="Return",command=editor.destroy).place(x=10,y=100)
+    return_button=tk.Button(editor, text="Return",command=editor.destroy).place(x=10,y=100
+    
 
-    editor.mainloop()
+editor.mainloop()
