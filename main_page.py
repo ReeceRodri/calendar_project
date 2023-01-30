@@ -118,23 +118,14 @@ def scroll_date_left():
 # since the time will be an option menu
 def create_time_menu():
     times = ["12:00 AM"]
+    times = ["00:00"]
     for i in range(1, 96):
         hour = i // 4
         minute = (i % 4) * 15
-        if hour == 0:
-            hour = 12
         if minute == 0:
-            time = f"{hour}:00 AM"
+            time = f"{hour}:00"
         else:
-            time = f"{hour}:{minute} AM"
-        if hour == 12 and minute == 0:
-            time = "12:00 PM"
-        elif hour > 12:
-            hour = hour - 12
-            if minute == 0:
-                time = f"{hour}:00 PM"
-            else:
-                time = f"{hour}:{minute} PM"
+            time = f"{hour}:{minute}"
         times.append(time)
     return times 
 
