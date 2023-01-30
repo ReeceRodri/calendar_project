@@ -115,7 +115,29 @@ def scroll_date_left():
             scroll_date_left()
     
 
- 
+# since the time will be an option menu
+def create_time_menu():
+    times = ["12:00 AM"]
+    for i in range(1, 96):
+        hour = i // 4
+        minute = (i % 4) * 15
+        if hour == 0:
+            hour = 12
+        if minute == 0:
+            time = f"{hour}:00 AM"
+        else:
+            time = f"{hour}:{minute} AM"
+        if hour == 12 and minute == 0:
+            time = "12:00 PM"
+        elif hour > 12:
+            hour = hour - 12
+            if minute == 0:
+                time = f"{hour}:00 PM"
+            else:
+                time = f"{hour}:{minute} PM"
+        times.append(time)
+    return times 
+
 
 # add the following to the save button as a command and assign command=add_event
 def add_event():
@@ -127,8 +149,12 @@ def add_event():
 
     #Defining the save button function
     def save():
-        date= editor_date.get()
-        time= editor_time.get()
+        #assigning global variables to get them in the modification function
+        global editor_time_menu
+        global editor_title
+        global editor_description
+
+        time=editor_time_menu.get()
         title= editor_title.get()
         description= editor_description.get()
         
@@ -136,47 +162,45 @@ def add_event():
         queries=Queries()
         
         # writing to csv file
-        queries.write_file([date,time,title,description])
+        queries.write_file([current_window_date,time,title,description])
         
-
-
+    
+    #converting date to string
+    for i in range(len(current_window_date)):
+        str_date= str(current_window_date[0])+'/'+str(current_window_date[1])+'/'+str(current_window_date[2])
+    
     #Defining Labels 
     lb_date=tk.Label(editor,text="Date").place(x=10,y=20)
     lb_time=tk.Label(editor,text="Time").place(x=10,y=40)
-    lb_title=tk.Label(editor,text="Title").place(x=10,y=60)
-    lb_desc=tk.Label(editor,text="Description").place(x=10,y=80)
-
-  
-    # defining global statements to retrive data from main
-    global value_inside_days 
-    global value_inside_month
-    global value_inside_year
-    global editor_date
-    global editor_time
-    global editor_title
-    global editor_description
-    selected_date=[value_inside_days,value_inside_month,value_inside_year]
+    lb_title=tk.Label(editor,text="Title").place(x=10,y=70)
+    lb_desc=tk.Label(editor,text="Description").place(x=10,y=90)
 
     
-     
+    
+    # date label
+    editor_date=tk.Label(editor,text=str_date).place(x=100,y=20)
+    
     #Entry Statements
-    editor_time=tk.Entry(editor,width=30)
-    editor_time.place(x=100,y=40)
+    times = create_time_menu()
+    variable = tk.StringVar(root)
+    variable.set(times[0])
+    editor_time_menu = tk.OptionMenu(editor, variable, *times)
+    editor_time_menu.place(x=100,y=40)
 
     editor_title=tk.Entry(editor,width=30)
-    editor_title.place(x=100,y=60)
+    editor_title.place(x=100,y=80)
 
     editor_description=tk.Entry(editor,width=30)
-    editor_description.place(x=100,y=80)
+    editor_description.place(x=100,y=100)
     
 
 
     
  
     #Creating the save button
-    save_button=tk.Button(editor,text="SAVE",command = save).place(x=300,y=100)
+    save_button=tk.Button(editor,text="SAVE",command = save).place(x=300,y=120)
 
-    return_button=tk.Button(editor, text="Return",command=editor.destroy).place(x=10,y=100)  
+    return_button=tk.Button(editor, text="Return",command=editor.destroy).place(x=10,y=120)  
     
 #Command to modify/edit data
 def modify():
@@ -184,16 +208,20 @@ def modify():
     #creating an instance of queries class
     queries=Queries("event_data_base.csv")
     
-    found, column1, column2, column3 = queries.check_date(date)
+    #converting date to string
+    for i in range(len(current_window_date)):
+        str_date= str(current_window_date[0])+'/'+str(current_window_date[1])+'/'+str(current_window_date[2])
+    
+    found, column_time, column_title, column_description = queries.check_date(str_date)
     if found:
-        editor_time.delete(0, END)
-        editor_time.insert(0, column1)
+        editor_time_menu.set(column_time)
         editor_title.delete(0, END)
-        editor_title.insert(0, column2)
+        editor_title.insert(0, column_title)
         editor_description.delete(0, END)
-        editor_description.insert(0, column3)
+        editor_description.insert(0, column_description)
     else:
-        print("Date not found in the CSV file")
+        err_mesg=tk.Label("Date not found in the CSV file")
+        err_mesg.place(x=40,y=140)
 
     
 
@@ -267,7 +295,7 @@ value_inside_year = tk.IntVar(date_frame)
 value_inside_year.set(YEAR)
 year_optionmenue = tk.OptionMenu(date_frame, value_inside_year, *year_list,command = callback_year)
 year_optionmenue.place(relx=0.6, rely=0, relwidth= 0.4, relheight=1)
-print(value_inside_days,value_inside_month,value_inside_year)
+print()
 
 
 root.mainloop()
