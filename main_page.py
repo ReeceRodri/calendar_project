@@ -1,11 +1,12 @@
 import tkinter as tk
-from tkinter import ttk
-from datetime  import date
+from tkinter import END, ttk
+from datetime  import date, datetime
 from  calendar import monthrange
 from statistics_page import statistics_page
-from Event_Details import add_event
+from Queries import Queries
 
 root = tk.Tk()
+root.title("Calander")
 root.geometry('500x400')
 
 DATE = str(date.today()).split('-')
@@ -113,7 +114,95 @@ def scroll_date_left():
             current_window_date[0] = create_days_list(current_window_date[2],current_window_date[1])[-1] + 1
             scroll_date_left()
     
-   
+
+ 
+
+# add the following to the save button as a command and assign command=add_event
+def add_event():
+    editor= tk.Toplevel(root)
+    editor.title("Calendar")
+    editor.geometry("350x250")
+
+
+
+    #Defining the save button function
+    def save():
+        date= editor_date.get()
+        time= editor_time.get()
+        title= editor_title.get()
+        description= editor_description.get()
+        
+        #creating an instance of queries class
+        queries=Queries()
+        
+        # writing to csv file
+        queries.write_file([date,time,title,description])
+        
+
+
+    #Defining Labels 
+    lb_date=tk.Label(editor,text="Date").place(x=10,y=20)
+    lb_time=tk.Label(editor,text="Time").place(x=10,y=40)
+    lb_title=tk.Label(editor,text="Title").place(x=10,y=60)
+    lb_desc=tk.Label(editor,text="Description").place(x=10,y=80)
+
+  
+    # defining global statements to retrive data from main
+    global value_inside_days 
+    global value_inside_month
+    global value_inside_year
+    global editor_date
+    global editor_time
+    global editor_title
+    global editor_description
+    selected_date=[value_inside_days,value_inside_month,value_inside_year]
+
+    
+     
+    #Entry Statements
+    editor_time=tk.Entry(editor,width=30)
+    editor_time.place(x=100,y=40)
+
+    editor_title=tk.Entry(editor,width=30)
+    editor_title.place(x=100,y=60)
+
+    editor_description=tk.Entry(editor,width=30)
+    editor_description.place(x=100,y=80)
+    
+
+
+    
+ 
+    #Creating the save button
+    save_button=tk.Button(editor,text="SAVE",command = save).place(x=300,y=100)
+
+    return_button=tk.Button(editor, text="Return",command=editor.destroy).place(x=10,y=100)  
+    
+#Command to modify/edit data
+def modify():
+    add_event()
+    #creating an instance of queries class
+    queries=Queries("event_data_base.csv")
+    
+    found, column1, column2, column3 = queries.check_date(date)
+    if found:
+        editor_time.delete(0, END)
+        editor_time.insert(0, column1)
+        editor_title.delete(0, END)
+        editor_title.insert(0, column2)
+        editor_description.delete(0, END)
+        editor_description.insert(0, column3)
+    else:
+        print("Date not found in the CSV file")
+
+    
+
+
+
+
+
+
+
 
 def create_event(frame):
     single_event_frame  = tk.Frame(frame , bg = 'black')
@@ -178,8 +267,7 @@ value_inside_year = tk.IntVar(date_frame)
 value_inside_year.set(YEAR)
 year_optionmenue = tk.OptionMenu(date_frame, value_inside_year, *year_list,command = callback_year)
 year_optionmenue.place(relx=0.6, rely=0, relwidth= 0.4, relheight=1)
-
-
+print(value_inside_days,value_inside_month,value_inside_year)
 
 
 root.mainloop()

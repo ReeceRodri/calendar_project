@@ -10,6 +10,7 @@ class Queries:
         is_Exist = os.path.exists(self.file_name)
         if is_Exist:
             pass
+                
         else:
             with open(self.file_name, "w") as  creating_csv_file:
                 pass
@@ -42,11 +43,16 @@ class Queries:
 
 # checking current date and returning the entire row (update: 1. give and option to give the date and return values according to it
 #                                                             2. instead of returning one row -> returns all the rows which are coresponding to a given date)          
-    def check_date(self, date):
-        return_list = []
-        for row in self.data:
-            if row[1] == date:
-                return_list.append(row)
-        return return_list
+    def check_date(self,date):
+        with open(self.file_name, 'r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if row[0] == date:
+                    column_time = row[1]
+                    column_title = row[2]
+                    column_description = row[3]
+                    return True, column_time, column_title, column_description
+            return False, None, None, None
+
 
 
