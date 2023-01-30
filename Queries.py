@@ -54,5 +54,22 @@ class Queries:
                     return True, column_time, column_title, column_description
             return False, None, None, None
 
+    def select_date_events(self,date):
 
+        # Change values to a suitable format for comerision with values from the db 
+        for i in range(len(date)):
+            date[i] = str(date[i])
+        date_str = '/'.join(date)
+
+        # Create a list to add selected rows 
+        return_list = []
+
+        # Check is the row coresponded
+        with open(self.file_name, 'r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if row[0] == date_str:
+                    return_list.append(row)
+            return return_list
+                    
 
